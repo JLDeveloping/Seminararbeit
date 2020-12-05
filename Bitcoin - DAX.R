@@ -16,20 +16,15 @@ library(PerformanceAnalytics)
 #Globale Variablem
 startZeitraum = "2010-07-01"     #startzeitraum der Daten
 endzeitraum = "2020-03-20"       #Endzeitraum der Daten
-endeZeitachse = paste0('/',endzeitraum)   #Zusammengefügter String um Zeitreihe abzuschneiden
-## Kurswahl: 1=Open, 2=High, 3=Low, 4=Close, 5=Volume, 6=Adjusted
-kurswahl = 6
+kurswahl = 6                     # Kurswahl: 1=Open, 2=High, 3=Low, 4=Close, 5=Volume, 6=Adjusted
 
 #Lädt die Daten für DAX und Bitcoin-Euro
-DAX = getSymbols(Symbols = "^GDAXI", from=startZeitraum, auto.assign = FALSE)[,kurswahl]
-BitcoinEUR = getSymbols(Symbols = "BTC-EUR",from=startZeitraum, auto.assign = FALSE)[,kurswahl]
+DAX = getKurse("^GDAXI", startZeitraum, endzeitraum, kurswahl)
+BitcoinEUR = getKurse("BTC-EUR", startZeitraum, endzeitraum, kurswahl)
 
-#Lädt die relevante Zeitreihe
-DAXBeobachtungen = DAX[endeZeitachse]
-BitcoinEURBeobachtungen = BitcoinEUR[endeZeitachse]
 
 ##
-zeitachse = time(BitcoinEURBeobachtungen)   #Zeitachse des Objektes
+zeitachse = time(BitcoinEUR)   #Zeitachse des Objektes
 
 
 #Berechnung der Mittelwerte
@@ -49,8 +44,15 @@ VaR()
 
 
 #matrix = as.matrix(DAX)
-#Erstellt ein Diagramm mit beiden Verläufen
-#chartSeries(Cl(bitcoin_eur_short))
-#ggplot(aes(x=time(bitcoin_eur_short),y=bitcoin_eur_short[,1]),data=bitcoin_eur_short) + geom_line()
-#lines(DAX_short)
-#ugarch
+
+
+
+
+#########
+#Funktionen
+#########
+
+getKurse = function(symbols, start, ende, kurs){
+  tempKurs = getSymbols(Symbols = symbols, from = start, auto.assign = FALSE)[,kurswahl];
+  tempKurs[paste0('/',ende)]
+}
