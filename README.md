@@ -1,4 +1,3 @@
 # Seminararbeit
 
-# Funktionen
-Beinhaltet wichtige Funktionen zur Datenerhebung und Auswertung
+Stand von der Besprechung am 5.12.2020
