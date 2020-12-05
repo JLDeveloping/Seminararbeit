@@ -15,7 +15,9 @@ getKurse = function(symbols, start, ende, kurs){
 getReturn = function(periode, day, data){
   if (periode == "jährlich") {
     temp = do.call(rbind, lapply(split(data, "years"), last));
+    Return.calculate(temp)
   };
-  c(as.matrix((first(data))[,1]-as.matrix(first(temp))[,1])/100, Return.calculate(temp)[2:length(temp)])
-  #Return.calculate(temp)
+  if (periode == ""){
+    Return.calculate(data)
+  }
 }
