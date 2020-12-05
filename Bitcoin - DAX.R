@@ -24,15 +24,23 @@ kurswahl = 6                     # Kurswahl: 1=Open, 2=High, 3=Low, 4=Close, 5=V
 
 #Lädt die Daten für DAX und Bitcoin-Euro
 DAX = getKurse("^GDAXI", startZeitraum, endzeitraum, kurswahl)
-BitcoinEUR = getKurse("BTC-USD", startZeitraum, endzeitraum, kurswahl)
+BitcoinEUR = getKurse("BTC-EUR", startZeitraum, endzeitraum, kurswahl)
+BitcoinUSD = getKurse("BTCUSD=X", startZeitraum, endzeitraum, kurswahl)
 
 #
 BitcoinEURRendite = getReturn("", "last", BitcoinEUR)
-DAXRendite = getReturn("jährlich", "last", DAX)
+BitcoinUSDRendite = na.omit(ROC(BitcoinUSD, type = "discrete"))
+DAXRendite = getReturn("", "last", DAX)
 
-BitcoinEURVar = VaR(ROC(BitcoinEUR), p=0.95, type, method = "modified")
+BitcoinEURVar05 = VaR(BitcoinEURRendite, p=0.95, type, method = "modified")
+BitcoinUSDVar05 = VaR(BitcoinUSDRendite, p=0.95, type, method = "modified")
+DAXVar05 = VaR(BitcoinEURRendite, p=0.95, type, method = "modified")
 
-###
+BitcoinEURVar01 = VaR(BitcoinEURRendite, p=0.99, type, method = "modified")
+BitcoinUSDVar01 = VaR(BitcoinUSDRendite, p=0.99, type, method = "modified")
+DAXVar01 = VaR(BitcoinEURRendite, p=0.99, type, method = "modified")
+
+ ###
 temp = do.call(rbind, lapply(split(DAX, "years"), last));
 c(first(DAX)[,1]-first(temp)[,1], Return.calculate(temp)[2:length(temp)])
 pr = checkData(DAX, method = "xts")
